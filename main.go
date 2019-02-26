@@ -23,10 +23,15 @@ import (
 
 func main() {
 	http.HandleFunc("/", printDetail)
-	http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func printDetail(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Printf("Host: %s\n", r.Host)
 	fmt.Printf("Method: %s\n", r.Method)
 	fmt.Printf("Proto: %s\n", r.Proto)
 	fmt.Printf("RemoteAddr: %s\n", r.RemoteAddr)
@@ -41,5 +46,8 @@ func printDetail(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("  » %-20s%s\n", k, v)
 	}
 
-	w.Write([]byte("success"))
+	_, err := w.Write([]byte("success"))
+	if err != nil {
+		panic(err)
+	}
 }
